@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pomodoro JS</title>
+  <link rel="icon" type="image/x-icon" href="tomate-icon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Rock+3D&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 id="title", class="title">Pomodoro</h1>
+    <div id="timer">25:00</div>
+    <div class="buttons">
+    <button onclick="startTimer()">Iniciar</button>
+    <button onclick="resetTimer()">Resetar</button>
+  </div>
+  </div>
+  <script>
+    let time = 25 * 60; 
+    let timerDisplay = document.getElementById("timer");
+    let timerInterval = null;
+    let resting = false;
+
+    function updateDisplay() {
+      let minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+      timerDisplay.textContent = 
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return; 
+      timerInterval = setInterval(() => {
+        time--;
+        updateDisplay();
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;  
+          if (!resting) {
+              alert("Tempo do Pomodoro acabou! Hora de fazer uma pausa.");
+              time = 5 * 60; 
+              resting = true;
+              startTimer()
+          } else {
+              alert("Tempo de descanso acabou. Volte ao trabalho!");
+              time = 25 * 60; 
+              resting = false;
+          }
+        }
+      }, 1000);
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      time = 25 * 60;
+      updateDisplay();
+      
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
